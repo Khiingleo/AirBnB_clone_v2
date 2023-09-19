@@ -2,7 +2,7 @@
 """ Console Module """
 import cmd
 import sys
-import shlex
+from shlex import split
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -116,40 +116,36 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
-            print("** class name missing **")
+        parts = args.split(' ')
+        class_name = parts[0]
+
+        if class_name not in self.classes:
+            print("** class doesn't exist **")
             return
-        try:
-            # tokenise and remove backslashes
-            args = shlex.split(args)
-            instance = eval(args[0])()
-            # iterate through remaining parts (parameters)
-            for i in args[1:]:
+
+        params = ' '.join(parts[1:])
+
+        param_pairs = params.split(',')
+
+        kwargs = {}
+        for pair in param_pairs:
+            key, value = pair.strip().split('=')
+            value = value.strip('"')
+            key = key.replace('_', ' ')
+
+            if '.' in value:
                 try:
-                    # split the parameter into key, value pairs using '='
-                    key = i.split('=')[0]
-                    value = i.split('=')[1]
-                    if hasattr(instance, key) is True:
-                        # replace underscore with spaces
-                        value = value.replace('_', ' ')
-                        try:
-                            # evaluate the value
-                            # i.e string becomes a string
-                            # integer becomes an integer and
-                            # float becomes a float
-                            value = eval(value)
-                        except (SyntaxError, NameError):
-                            pass
-                        setattr(instance, key, value)
-                except (ValueError, IndexError):
+                    value = float(value)
+                except ValueError:
                     pass
-            instance.save()
-            print(instance.id)
-        except SyntaxError:
-            print("** class name missing **")
-        except NameError:
-            print("** class doesn't exitst **")
-            return
+            elif value.isdigit():
+                value = int(value)
+
+            kwargs[key] = value
+
+        new_instance = HBNBCommand.classes[class_name](**kwargs)
+        new_instance.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
