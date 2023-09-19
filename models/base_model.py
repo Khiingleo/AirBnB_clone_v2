@@ -59,8 +59,7 @@ class BaseModel:
         dicts['__class__'] = self.__class__.__name__
         dicts['updated_at'] = self.updated_at.isoformat()
         dicts["created_at"] = self.created_at.isoformat()
-        if hasattr(self, "_sa_instance_state"):
-            del dicts["_sa_instance_state"]
+        dicts.pop("_sa_instance_state", None)
         return dicts
 
     def delete(self):
