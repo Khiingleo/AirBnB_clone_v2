@@ -27,7 +27,7 @@ sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 
 # update the nginx configuration
-sudo sed -i "$nginx_config" /etc/nginx/sites-available/default
+sudo sed -i "/listen 80 default_server;/a $nginx_config" /etc/nginx/sites-available/default
 
 # restart nginx after configuration
 sudo service nginx restart
