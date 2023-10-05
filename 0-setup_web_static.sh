@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # sets up my web servers for the deployment of web_static
 
-nginx_config="s|location /hbnb_static/ {.*|location /hbnb_static/"
-nginx_config+="{\n\talias /data/web_static/current/;\n}|"
+nginx_config="location /hbnb_static {\n\talias /data/web_static/current/;\n\t}\n"
 
 sudo apt-get -y update
 
@@ -28,6 +27,9 @@ sudo chown -R ubuntu:ubuntu /data/
 
 # update the nginx configuration
 sudo sed -i "/listen 80 default_server;/a $nginx_config" /etc/nginx/sites-available/default
+
+# test for error
+sudo nginx -t
 
 # restart nginx after configuration
 sudo service nginx restart
