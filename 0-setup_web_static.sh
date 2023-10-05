@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# sets up my web servers for the deployment of web_static
+# sets up my web servers fo the deployment of web_static
 
 nginx_config="location /hbnb_static {\n\talias /data/web_static/current/;\n\t}\n"
 
