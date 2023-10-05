@@ -26,6 +26,10 @@ def do_deploy(archive_path):
         filename = os.path.basename(archive_path)
         file_w_e = filename.split(".")[0]
         release_path = "/data/web_static/releases/{}".format(file_w_e)
+
+        # remove existing contents of the release directory
+        run("rm -rf {}".format(release_path))
+
         run("mkdir -p {}".format(release_path))
         run("tar -xzf /tmp/{} -C {}".format(filename, release_path))
 
