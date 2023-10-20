@@ -9,6 +9,12 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
+@app.teardown_appcontext
+def tear_down(self):
+    """After each request, remove the current SQLAlchemy Session"""
+    storage.close()
+
+
 @app.route("/states_list", strict_slashes=False)
 def states_list():
     """
@@ -19,12 +25,6 @@ def states_list():
     for s in storage.all(State).values():
         state_objs.append(s)
     return render_template("7-states_list.html", state_objs=state_objs)
-
-
-@app.teardown_appcontext
-def tear_down(self):
-    """After each request, remove the current SQLAlchemy Session"""
-    storage.close()
 
 
 if __name__ == "__main__":
