@@ -1,6 +1,7 @@
 # task 0 but with puppet
 
-$nginx_conf = "server {
+$nginx_conf = @(EOT)
+server {
     listen 80 default_server;
     listen [::]:80 default_server;
     add_header X-Served-By ${hostname};
@@ -21,11 +22,12 @@ $nginx_conf = "server {
       root /var/www/html;
       internal;
     }
-}"
+}
+EOT
 
 package {'nginx':
   ensure    => 'present',
-  provideer => 'apt',
+  provider => 'apt',
 }
 
 file {'/data':
