@@ -9,7 +9,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.teardown_context
+@app.teardown_appcontext
 def tear_down(self):
     """remove current session after each request"""
     storage.close()
