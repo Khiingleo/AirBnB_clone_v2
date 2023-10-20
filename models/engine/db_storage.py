@@ -27,7 +27,7 @@ class DBStorage:
         passwd = getenv("HBNB_MYSQL_PWD")
         host = getenv("HBNB_MYSQL_HOST")
         db = getenv("HBNB_MYSQL_DB")
-        
+
         self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".format(
             user, passwd, host, db), pool_pre_ping=True)
 
@@ -43,7 +43,7 @@ class DBStorage:
         dicts = {}
         for cl in HBNBCommand.classes:
             if cls is None or cls is HBNBCommand.classes[cl] or cls is cl:
-                objects =  self.__session.query(HBNBCommand.classes[cl]).all()
+                objects = self.__session.query(HBNBCommand.classes[cl]).all()
                 for obj in objects:
                     key = obj.__class__.__name__ + '.' + obj.id
                     dicts[key] = obj
