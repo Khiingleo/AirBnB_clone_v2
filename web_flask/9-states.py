@@ -30,6 +30,7 @@ def states_list():
 @app.route("/states/<id>", strict_slashes=False)
 def states_id(id):
     """displays an HTML page with info about <id>"""
+    state_obj = None
     for state in storage.all(State).values():
         if state.id == id:
             state_obj = state
