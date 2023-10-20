@@ -18,7 +18,7 @@ def tear_down(self):
 @app.route("/states_list", strict_slashes=False)
 def states_list():
     """
-    display a HTML page with a list of all state objects
+    displays a HTML page with a list of all state objects
     in DBStorage
     """
     state_objs = []
