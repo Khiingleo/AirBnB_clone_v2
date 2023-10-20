@@ -32,7 +32,7 @@ def c(text):
 
 @app.route("/python")
 @app.route("/python/<text>")
-def python(text):
+def python(text="is cool"):
     """displays Python followed by <text>"""
     text = text.replace("_", " ")
     return "Python {}".format(text)
