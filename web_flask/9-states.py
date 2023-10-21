@@ -10,22 +10,25 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def teardown(self):
+def teardown(exc):
     """remove running sqlalchemy session"""
     storage.close()
 
-
 @app.route("/states", strict_slashes=False)
 def states():
-    """displays a html page with a list of all states"""
+    """Displays an HTML page with a list of all States.
+    """
     states = storage.all("State")
     return render_template("9-states.html", state=states)
 
-
 @app.route("/states/<id>", strict_slashes=False)
 def states_id(id):
-    """displays a html page with info about <id>"""
+    """Displays an HTML page with info about <id>"""
     for state in storage.all("State").values():
         if state.id == id:
-            return render_template("9-states.html", state=states)
+            return render_template("9-states.html", state=state)
     return render_template("9-states.html")
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
