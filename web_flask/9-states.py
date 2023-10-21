@@ -1,42 +1,31 @@
 #!/usr/bin/python3
 """
-starts a Flask web application
+starts a flask web application
 """
 from models import storage
-from models.state import State
-from models.city import City
 from flask import Flask, render_template
+
 
 app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def tear_down(self):
-    """After each request remove the current SQLAlchemy Session"""
+def teardown(self):
+    """remove running sqlalchemy session"""
     storage.close()
 
+
 @app.route("/states", strict_slashes=False)
-@app.route("/states_list", strict_slashes=False)
-def states_list():
-    """
-    displays a HTML page with a list of all state objects
-    in DBStorage
-    """
-    state_objs = []
-    for s in storage.all(State).values():
-        state_objs.append(s)
-    return render_template("7-states_list.html", state_objs=state_objs)
+def states():
+    """displays a html page with a list of all states"""
+    states = storage.all("State")
+    return render_template("9-states.html", state=states)
 
 
 @app.route("/states/<id>", strict_slashes=False)
 def states_id(id):
-    """displays an HTML page with info about <id>"""
-    state_obj = None
-    for state in storage.all(State).values():
+    """displays a html page with info about <id>"""
+    for state in storage.all("State").values():
         if state.id == id:
-            state_obj = state
-    return render_template("9-states.html", state_obj=state_obj)
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+            return render_template("9-states.html", state=states)
+    return render_template("9-states.html")
